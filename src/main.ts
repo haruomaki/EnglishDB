@@ -130,14 +130,21 @@ function setup() {
     sentenceInput.focus();
   });
 
+  // テーブル表示へ
   document.getElementById("table-view-btn")?.addEventListener("click", () => {
     currentView = "table";
     renderList(loadSentences());
   });
 
+  // カード表示へ
   document.getElementById("card-view-btn")?.addEventListener("click", () => {
     currentView = "card";
     renderList(loadSentences());
+  });
+
+  // 単語カードページへ移動
+  document.getElementById("flashcard-link")?.addEventListener("click", () => {
+    window.location.href = import.meta.env.BASE_URL + "/flashcard.html";
   });
 
   // JSONをエクスポート
