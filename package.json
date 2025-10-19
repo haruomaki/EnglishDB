@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && cd dist && git init && git add . && git commit -m 'Deploy' && git push -f origin HEAD:@pages"
   },
   "devDependencies": {
     "typescript": "~5.9.3",
