@@ -55,7 +55,7 @@ nextBtn.addEventListener("click", () => {
 });
 
 backBtn.addEventListener("click", () => {
-    window.location.href = "/"; // index.htmlへ戻る
+    window.location.href = ".."; // index.htmlへ戻る
 });
 
 showCard(index);
