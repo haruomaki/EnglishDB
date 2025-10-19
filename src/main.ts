@@ -139,6 +139,31 @@ function setup() {
     currentView = "card";
     renderList(loadSentences());
   });
+
+  // JSONをエクスポート
+  document.getElementById("export-json-btn")?.addEventListener("click", () => {
+    const list = loadSentences();
+    if (list.length === 0) {
+      alert("まだデータがありません。");
+      return;
+    }
+
+    const blob = new Blob([JSON.stringify(list, null, 2)], { type: "application/json" });
+
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(4, "0");
+    const d = String(now.getDate()).padStart(2, "0");
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `wordbook_${y}${m}${d}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
 }
 
 setup();
