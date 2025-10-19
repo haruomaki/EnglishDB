@@ -1,24 +1,24 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+document.querySelector("#greet_button")?.addEventListener("click", () => {
+  console.log("おしたよ");
+});
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+// Vite + TS でも書き方はほぼ同じ
+const form = document.querySelector<HTMLFormElement>("#inputForm")!;
+const input = document.querySelector<HTMLInputElement>("#textInput")!;
+const list = document.querySelector<HTMLUListElement>("#stringList")!;
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const value = input.value.trim();
+  if (!value) return;
+
+  const li = document.createElement("li");
+  li.textContent = value;
+  list.appendChild(li);
+
+  input.value = "";
+  input.focus();
+});
