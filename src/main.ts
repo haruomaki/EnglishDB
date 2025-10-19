@@ -17,6 +17,7 @@ function loadSentences(): Sentence[] {
 function saveSentences(list: Sentence[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
 }
+let currentView: "card" | "table" = "card";
 
 function renderList(list: Sentence[]) {
   const container = document.getElementById("list")!;
@@ -27,31 +28,76 @@ function renderList(list: Sentence[]) {
     return;
   }
 
-  list.forEach((item) => {
-    const div = document.createElement("div");
-    div.className = "card";
+  if (currentView === "table") {
+    // テーブル形式
+    const table = document.createElement("table");
+    table.style.width = "100%";
+    table.style.borderCollapse = "collapse";
 
-    const sentence = document.createElement("div");
-    sentence.className = "sentence";
-    sentence.textContent = item.sentence;
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th style="text-align:left;border-bottom:1px solid #ccc;">英語文</th>
+          <th style="text-align:left;border-bottom:1px solid #ccc;">訳・メモ</th>
+          <th style="border-bottom:1px solid #ccc;"></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    `;
 
-    const note = document.createElement("div");
-    note.className = "note";
-    note.textContent = item.note;
+    const tbody = table.querySelector("tbody")!;
 
-    const del = document.createElement("button");
-    del.className = "delete-btn";
-    del.textContent = "✕";
-    del.addEventListener("click", () => {
-      const newList = list.filter((s) => s.id !== item.id);
+    list.forEach((item) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="padding:6px;">${item.sentence}</td>
+        <td style="padding:6px;color:#777;font-style:italic;">${item.note}</td>
+        <td style="text-align:right;padding:6px;">
+          <button class="delete-btn" data-id="${item.id}">✕</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    container.appendChild(table);
+  } else {
+    // これまでのカード表示
+    list.forEach((item) => {
+      const div = document.createElement("div");
+      div.className = "card";
+
+      const sentence = document.createElement("div");
+      sentence.className = "sentence";
+      sentence.textContent = item.sentence;
+
+      const note = document.createElement("div");
+      note.className = "note";
+      note.textContent = item.note;
+
+      const del = document.createElement("button");
+      del.className = "delete-btn";
+      del.textContent = "✕";
+      del.addEventListener("click", () => {
+        const newList = list.filter((s) => s.id !== item.id);
+        saveSentences(newList);
+        renderList(newList);
+      });
+
+      div.appendChild(sentence);
+      div.appendChild(note);
+      div.appendChild(del);
+      container.appendChild(div);
+    });
+  }
+
+  // 削除ボタン（テーブル表示用）
+  container.querySelectorAll(".delete-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = Number((btn as HTMLButtonElement).dataset.id);
+      const newList = list.filter((s) => s.id !== id);
       saveSentences(newList);
       renderList(newList);
     });
-
-    div.appendChild(sentence);
-    div.appendChild(note);
-    div.appendChild(del);
-    container.appendChild(div);
   });
 }
 
@@ -82,6 +128,16 @@ function setup() {
     sentenceInput.value = "";
     noteInput.value = "";
     sentenceInput.focus();
+  });
+
+  document.getElementById("table-view-btn")?.addEventListener("click", () => {
+    currentView = "table";
+    renderList(loadSentences());
+  });
+
+  document.getElementById("card-view-btn")?.addEventListener("click", () => {
+    currentView = "card";
+    renderList(loadSentences());
   });
 }
 

@@ -46,6 +46,24 @@ h1 {
   background: #1d4ed8;
 }
 
+.view-switch {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.view-switch button {
+  margin-left: 6px;
+  background: #e5e7eb;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.view-switch button:hover {
+  background: #d1d5db;
+}
+
 .card {
   background: #f3f4f6;
   border-radius: 12px;
