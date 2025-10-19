@@ -1,3 +1,5 @@
+import "./style.css"
+
 interface Sentence {
   id: number;
   sentence: string;

@@ -58,8 +58,9 @@ h1 {
   font-weight: bold;
 }
 
-.card .note {
-  color: #555;
+.note {
+  color: #6db8bb;
+  font-style: italic;
   margin-top: 4px;
 }
 
