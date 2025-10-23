@@ -1,4 +1,5 @@
 import "./style.css"
+import { onclick } from "./utils";
 
 interface Sentence {
   id: number;
@@ -104,12 +105,11 @@ function renderList(list: Sentence[]) {
 function setup() {
   const sentenceInput = document.getElementById("sentence") as HTMLInputElement;
   const noteInput = document.getElementById("note") as HTMLInputElement;
-  const addBtn = document.getElementById("add-btn")!;
 
   let list = loadSentences();
   renderList(list);
 
-  addBtn.addEventListener("click", () => {
+  onclick("add_btn", () => {
     const sentence = sentenceInput.value.trim();
     const note = noteInput.value.trim();
     if (!sentence) return;
@@ -131,24 +131,24 @@ function setup() {
   });
 
   // テーブル表示へ
-  document.getElementById("table-view-btn")?.addEventListener("click", () => {
+  onclick("table-view-btn", () => {
     currentView = "table";
     renderList(loadSentences());
   });
 
   // カード表示へ
-  document.getElementById("card-view-btn")?.addEventListener("click", () => {
+  onclick("card-view-btn", () => {
     currentView = "card";
     renderList(loadSentences());
   });
 
   // 単語カードページへ移動
-  document.getElementById("flashcard-link")?.addEventListener("click", () => {
+  onclick("flashcard-link", () => {
     window.location.href = import.meta.env.BASE_URL + "/flashcard.html";
   });
 
   // JSONをエクスポート
-  document.getElementById("export-json-btn")?.addEventListener("click", () => {
+  onclick("export-json-btn", () => {
     const list = loadSentences();
     if (list.length === 0) {
       alert("まだデータがありません。");
