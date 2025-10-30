@@ -88,6 +88,11 @@ function renderList(list: Sentence[]) {
       div.appendChild(note);
       div.appendChild(del);
       container.appendChild(div);
+
+      // カードをクリックしたとき
+      div.addEventListener("click", () => {
+        console.log("カードをクリック！");
+      });
     });
   }
 
