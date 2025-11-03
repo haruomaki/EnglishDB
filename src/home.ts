@@ -1,5 +1,3 @@
-import { onclick } from './utils';
-
 interface Sentence {
   id: number;
   sentence: string;
@@ -113,7 +111,7 @@ export function renderHome() {
   let list = loadSentences();
   renderList(list);
 
-  onclick('add_btn', () => {
+  ONCLICK('add_btn', () => {
     const sentence = sentenceInput.value.trim();
     const note = noteInput.value.trim();
     if (!sentence) return;
@@ -135,24 +133,24 @@ export function renderHome() {
   });
 
   // テーブル表示へ
-  onclick('table-view-btn', () => {
+  ONCLICK('table-view-btn', () => {
     currentView = 'table';
     renderList(loadSentences());
   });
 
   // カード表示へ
-  onclick('card-view-btn', () => {
+  ONCLICK('card-view-btn', () => {
     currentView = 'card';
     renderList(loadSentences());
   });
 
   // 単語カードページへ移動
-  onclick('flashcard-link', () => {
+  ONCLICK('flashcard-link', () => {
     window.location.href = import.meta.env.BASE_URL + '/flashcard.html';
   });
 
   // JSONをエクスポート
-  onclick('export-json-btn', () => {
+  ONCLICK('export-json-btn', () => {
     const list = loadSentences();
     if (list.length === 0) {
       alert('まだデータがありません。');

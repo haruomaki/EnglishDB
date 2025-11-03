@@ -1,3 +1,6 @@
+// まずグローバル関数を登録
+import './globals';
+
 import './style.css';
 import { renderHome } from './home.ts';
 
