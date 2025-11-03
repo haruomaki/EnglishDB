@@ -105,6 +105,26 @@ function renderList(list: Sentence[]) {
 }
 
 export function renderHome() {
+  const appElement = document.getElementById('app') as HTMLDivElement;
+  appElement.innerHTML = `
+    <h1>英語短文ノート</h1>
+
+    <section class="form-section">
+      <input id="sentence" type="text" placeholder="英語文を入力" />
+      <input id="note" type="text" placeholder="メモ（日本語訳など）" />
+      <button id="add-btn">追加</button>
+    </section>
+
+    <div class="view-switch">
+      <button id="table-view-btn">テーブル表示</button>
+      <button id="card-view-btn">カード表示</button>
+      <button id="flashcard-link">単語帳モードへ</button>
+      <button id="export-json-btn">JSONエクスポート</button>
+    </div>
+
+    <section id="list" class="list-section"></section>
+  `;
+
   const sentenceInput = document.getElementById('sentence') as HTMLInputElement;
   const noteInput = document.getElementById('note') as HTMLInputElement;
 
