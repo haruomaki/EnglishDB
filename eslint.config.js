@@ -16,7 +16,7 @@ export default [
             'semi': ['error', 'always'],
 
             // お好みの追加例
-            'quotes': ['error', 'single'],
+            'quotes': ['warn', 'single'],
             'indent': ['error', 2],
             'no-unused-vars': 'off',
             '@typescript-eslint/no-unused-vars': ['warn'],
