@@ -78,7 +78,7 @@ function generateList(list: Sentence[]): HTMLDivElement | null {
       del.addEventListener('click', () => {
         const newList = list.filter((s) => s.id !== item.id);
         saveSentences(newList);
-        generateList(newList);
+        refreshList();
       });
 
       div.appendChild(sentence);
@@ -93,17 +93,11 @@ function generateList(list: Sentence[]): HTMLDivElement | null {
     });
   }
 
-  // 削除ボタン（テーブル表示用）
-  container.querySelectorAll('.delete-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const id = Number((btn as HTMLButtonElement).dataset.id);
-      const newList = list.filter((s) => s.id !== id);
-      saveSentences(newList);
-      generateList(newList);
-    });
-  });
-
   return container;
+}
+
+function refreshList() {
+  document.querySelector('#list')?.replaceChildren(...generateList(loadSentences())!.children);
 }
 
 export function generateHome(): HTMLDivElement {
@@ -152,7 +146,7 @@ export function generateHome(): HTMLDivElement {
 
     list = [newItem, ...list];
     saveSentences(list);
-    generateList(list);
+    refreshList();
 
     sentenceInput.value = '';
     noteInput.value = '';
@@ -162,13 +156,13 @@ export function generateHome(): HTMLDivElement {
   // テーブル表示へ
   ONCLICK('table-view-btn', () => {
     currentView = 'table';
-    document.querySelector('#list')?.replaceChildren(...generateList(loadSentences())!.children);
+    refreshList();
   });
 
   // カード表示へ
   ONCLICK('card-view-btn', () => {
     currentView = 'card';
-    document.querySelector('#list')?.replaceChildren(...generateList(loadSentences())!.children);
+    refreshList();
   });
 
   // 単語カードページへ移動
