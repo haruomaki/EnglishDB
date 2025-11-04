@@ -2,7 +2,7 @@
 import './globals';
 
 import './style.css';
-import { renderHome } from './home.ts';
+import { generateHome } from './home.ts';
 
 class App {
   private currentState: string = 'home';
@@ -13,7 +13,7 @@ class App {
 
   showHome() {
     this.currentState = 'home';
-    document.getElementById('app')?.replaceChildren(...renderHome().children);
+    document.getElementById('app')?.replaceChildren(...generateHome().children);
   }
 }
 

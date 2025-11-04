@@ -17,13 +17,13 @@ function saveSentences(list: Sentence[]) {
 }
 let currentView: 'card' | 'table' = 'card';
 
-function renderList(list: Sentence[]) {
-  const container = document.getElementById('list')!;
+function generateList(list: Sentence[]): HTMLDivElement | null {
+  const container = document.createElement('div');
   container.innerHTML = '';
 
   if (list.length === 0) {
     container.innerHTML = '<p style=\'text-align:center;color:#999;\'>まだ何も追加されていません</p>';
-    return;
+    return null;
   }
 
   if (currentView === 'table') {
@@ -78,7 +78,7 @@ function renderList(list: Sentence[]) {
       del.addEventListener('click', () => {
         const newList = list.filter((s) => s.id !== item.id);
         saveSentences(newList);
-        renderList(newList);
+        generateList(newList);
       });
 
       div.appendChild(sentence);
@@ -99,12 +99,14 @@ function renderList(list: Sentence[]) {
       const id = Number((btn as HTMLButtonElement).dataset.id);
       const newList = list.filter((s) => s.id !== id);
       saveSentences(newList);
-      renderList(newList);
+      generateList(newList);
     });
   });
+
+  return container;
 }
 
-export function renderHome(): HTMLDivElement {
+export function generateHome(): HTMLDivElement {
   const home = document.createElement('div');
   home.innerHTML = `
     <h1>英語短文ノート</h1>
@@ -129,7 +131,7 @@ export function renderHome(): HTMLDivElement {
   const noteInput = home.querySelector('#note') as HTMLInputElement;
 
   let list = loadSentences();
-  // renderList(list);
+  home.querySelector('#list')?.replaceChildren(...generateList(list)!.children);
 
   function ONCLICK(id: string, f: (ev: MouseEvent) => void) {
     const el = home.querySelector('#' + id)! as HTMLElement;
@@ -150,7 +152,7 @@ export function renderHome(): HTMLDivElement {
 
     list = [newItem, ...list];
     saveSentences(list);
-    renderList(list);
+    generateList(list);
 
     sentenceInput.value = '';
     noteInput.value = '';
@@ -160,13 +162,13 @@ export function renderHome(): HTMLDivElement {
   // テーブル表示へ
   ONCLICK('table-view-btn', () => {
     currentView = 'table';
-    renderList(loadSentences());
+    document.querySelector('#list')?.replaceChildren(...generateList(loadSentences())!.children);
   });
 
   // カード表示へ
   ONCLICK('card-view-btn', () => {
     currentView = 'card';
-    renderList(loadSentences());
+    document.querySelector('#list')?.replaceChildren(...generateList(loadSentences())!.children);
   });
 
   // 単語カードページへ移動
