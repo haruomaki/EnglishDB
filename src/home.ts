@@ -104,9 +104,9 @@ function renderList(list: Sentence[]) {
   });
 }
 
-export function renderHome() {
-  const appElement = document.getElementById('app') as HTMLDivElement;
-  appElement.innerHTML = `
+export function renderHome(): HTMLDivElement {
+  const home = document.createElement('div');
+  home.innerHTML = `
     <h1>英語短文ノート</h1>
 
     <section class="form-section">
@@ -125,13 +125,18 @@ export function renderHome() {
     <section id="list" class="list-section"></section>
   `;
 
-  const sentenceInput = document.getElementById('sentence') as HTMLInputElement;
-  const noteInput = document.getElementById('note') as HTMLInputElement;
+  const sentenceInput = home.querySelector('#sentence') as HTMLInputElement;
+  const noteInput = home.querySelector('#note') as HTMLInputElement;
 
   let list = loadSentences();
-  renderList(list);
+  // renderList(list);
 
-  ONCLICK('add_btn', () => {
+  function ONCLICK(id: string, f: (ev: MouseEvent) => void) {
+    const el = home.querySelector('#' + id)! as HTMLElement;
+    el.addEventListener('click', f);
+  };
+
+  ONCLICK('add-btn', () => {
     const sentence = sentenceInput.value.trim();
     const note = noteInput.value.trim();
     if (!sentence) return;
@@ -193,4 +198,6 @@ export function renderHome() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
+
+  return home;
 }

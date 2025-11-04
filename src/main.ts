@@ -13,7 +13,7 @@ class App {
 
   showHome() {
     this.currentState = 'home';
-    renderHome();
+    document.getElementById('app')?.replaceChildren(...renderHome().children);
   }
 }
 
