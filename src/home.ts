@@ -77,9 +77,7 @@ function createList(list: Sentence[]): HTMLDivElement | null {
       edi.className = "edit-btn";
       edi.textContent = "🖊";
       edi.addEventListener("click", () => {
-        const ppp = document.createElement("p");
-        ppp.textContent = "編集しました";
-        div.appendChild(ppp);
+        div.replaceChildren(...createEditCard(item).children);
         // const newList = list.filter((s) => s.id !== item.id);
         // saveSentences(newList);
         // refreshList();
@@ -89,11 +87,6 @@ function createList(list: Sentence[]): HTMLDivElement | null {
       div.appendChild(note);
       div.appendChild(edi);
       container.appendChild(div);
-
-      // カードをクリックしたとき
-      div.addEventListener("click", () => {
-        console.log("カードをクリック！");
-      });
     });
   }
 
@@ -102,6 +95,28 @@ function createList(list: Sentence[]): HTMLDivElement | null {
 
 function refreshList() {
   document.querySelector("#list")?.replaceChildren(...createList(loadSentences())!.children);
+}
+
+// 入力フィールドを作成
+function createInput(value: string): HTMLInputElement {
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = value;
+  input.className = "edit-input";
+  return input;
+}
+
+// 編集カードを生成する
+function createEditCard(item: Sentence): HTMLDivElement {
+  const card = document.createElement("div");
+
+  const sentence_edit = createInput(item.sentence);
+  const note_edit = createInput(item.note);
+
+  card.appendChild(sentence_edit);
+  card.appendChild(note_edit);
+
+  return card;
 }
 
 export function createHome(): HTMLDivElement {
