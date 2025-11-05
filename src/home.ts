@@ -97,24 +97,24 @@ function refreshList() {
   document.querySelector("#list")?.replaceChildren(...createList(loadSentences())!.children);
 }
 
-// 入力フィールドを作成
-function createInput(value: string): HTMLInputElement {
-  const input = document.createElement("input");
-  input.type = "text";
-  input.value = value;
-  input.className = "edit-input";
-  return input;
-}
+// // 入力フィールドを作成
+// function createInput(value: string): HTMLInputElement {
+//   const input = document.createElement("input");
+//   input.type = "text";
+//   input.value = value;
+//   input.className = "edit-input";
+//   return input;
+// }
 
 // 編集カードを生成する
 function createEditCard(item: Sentence): HTMLDivElement {
   const card = document.createElement("div");
 
-  const sentence_edit = createInput(item.sentence);
-  const note_edit = createInput(item.note);
-
-  card.appendChild(sentence_edit);
-  card.appendChild(note_edit);
+  // TODO: XSS対策！
+  card.innerHTML = `
+    <p><input value="${item.sentence}"></p>
+    <p><input value="${item.note}"></p>
+  `;
 
   return card;
 }
