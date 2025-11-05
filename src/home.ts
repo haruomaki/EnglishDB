@@ -17,7 +17,7 @@ function saveSentences(list: Sentence[]) {
 }
 let currentView: "card" | "table" = "card";
 
-function generateList(list: Sentence[]): HTMLDivElement | null {
+function createList(list: Sentence[]): HTMLDivElement | null {
   const container = document.createElement("div");
   container.innerHTML = "";
 
@@ -101,10 +101,10 @@ function generateList(list: Sentence[]): HTMLDivElement | null {
 }
 
 function refreshList() {
-  document.querySelector("#list")?.replaceChildren(...generateList(loadSentences())!.children);
+  document.querySelector("#list")?.replaceChildren(...createList(loadSentences())!.children);
 }
 
-export function generateHome(): HTMLDivElement {
+export function createHome(): HTMLDivElement {
   const home = document.createElement("div");
   home.innerHTML = `
     <h1>英語短文ノート</h1>
@@ -129,7 +129,7 @@ export function generateHome(): HTMLDivElement {
   const noteInput = home.querySelector("#note") as HTMLInputElement;
 
   let list = loadSentences();
-  home.querySelector("#list")?.replaceChildren(...generateList(list)!.children);
+  home.querySelector("#list")?.replaceChildren(...createList(list)!.children);
 
   function ONCLICK(id: string, f: (ev: MouseEvent) => void) {
     const el = home.querySelector("#" + id)! as HTMLElement;
