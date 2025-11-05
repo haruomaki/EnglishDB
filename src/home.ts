@@ -5,7 +5,7 @@ interface Sentence {
   createdAt: string;
 }
 
-const STORAGE_KEY = 'wordbook';
+const STORAGE_KEY = "wordbook";
 
 function loadSentences(): Sentence[] {
   const data = localStorage.getItem(STORAGE_KEY);
@@ -15,22 +15,22 @@ function loadSentences(): Sentence[] {
 function saveSentences(list: Sentence[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
 }
-let currentView: 'card' | 'table' = 'card';
+let currentView: "card" | "table" = "card";
 
 function generateList(list: Sentence[]): HTMLDivElement | null {
-  const container = document.createElement('div');
-  container.innerHTML = '';
+  const container = document.createElement("div");
+  container.innerHTML = "";
 
   if (list.length === 0) {
-    container.innerHTML = '<p style=\'text-align:center;color:#999;\'>まだ何も追加されていません</p>';
+    container.innerHTML = "<p style='text-align:center;color:#999;'>まだ何も追加されていません</p>";
     return null;
   }
 
-  if (currentView === 'table') {
+  if (currentView === "table") {
     // テーブル形式
-    const table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.borderCollapse = 'collapse';
+    const table = document.createElement("table");
+    table.style.width = "100%";
+    table.style.borderCollapse = "collapse";
 
     table.innerHTML = `
       <thead>
@@ -43,10 +43,10 @@ function generateList(list: Sentence[]): HTMLDivElement | null {
       <tbody></tbody>
     `;
 
-    const tbody = table.querySelector('tbody')!;
+    const tbody = table.querySelector("tbody")!;
 
     list.forEach((item) => {
-      const tr = document.createElement('tr');
+      const tr = document.createElement("tr");
       tr.innerHTML = `
         <td style="padding:6px;">${item.sentence}</td>
         <td style="padding:6px;color:#777;font-style:italic;">${item.note}</td>
@@ -61,24 +61,24 @@ function generateList(list: Sentence[]): HTMLDivElement | null {
   } else {
     // これまでのカード表示
     list.forEach((item) => {
-      const div = document.createElement('div');
-      div.className = 'card';
+      const div = document.createElement("div");
+      div.className = "card";
 
-      const sentence = document.createElement('div');
-      sentence.className = 'sentence';
+      const sentence = document.createElement("div");
+      sentence.className = "sentence";
       sentence.textContent = item.sentence;
 
-      const note = document.createElement('div');
-      note.className = 'note';
+      const note = document.createElement("div");
+      note.className = "note";
       note.textContent = item.note;
 
       // 編集ボタン
-      const edi = document.createElement('button');
-      edi.className = 'edit-btn';
-      edi.textContent = '🖊';
-      edi.addEventListener('click', () => {
-        const ppp = document.createElement('p');
-        ppp.textContent = '編集しました';
+      const edi = document.createElement("button");
+      edi.className = "edit-btn";
+      edi.textContent = "🖊";
+      edi.addEventListener("click", () => {
+        const ppp = document.createElement("p");
+        ppp.textContent = "編集しました";
         div.appendChild(ppp);
         // const newList = list.filter((s) => s.id !== item.id);
         // saveSentences(newList);
@@ -91,8 +91,8 @@ function generateList(list: Sentence[]): HTMLDivElement | null {
       container.appendChild(div);
 
       // カードをクリックしたとき
-      div.addEventListener('click', () => {
-        console.log('カードをクリック！');
+      div.addEventListener("click", () => {
+        console.log("カードをクリック！");
       });
     });
   }
@@ -101,11 +101,11 @@ function generateList(list: Sentence[]): HTMLDivElement | null {
 }
 
 function refreshList() {
-  document.querySelector('#list')?.replaceChildren(...generateList(loadSentences())!.children);
+  document.querySelector("#list")?.replaceChildren(...generateList(loadSentences())!.children);
 }
 
 export function generateHome(): HTMLDivElement {
-  const home = document.createElement('div');
+  const home = document.createElement("div");
   home.innerHTML = `
     <h1>英語短文ノート</h1>
 
@@ -125,18 +125,18 @@ export function generateHome(): HTMLDivElement {
     <section id="list" class="list-section"></section>
   `;
 
-  const sentenceInput = home.querySelector('#sentence') as HTMLInputElement;
-  const noteInput = home.querySelector('#note') as HTMLInputElement;
+  const sentenceInput = home.querySelector("#sentence") as HTMLInputElement;
+  const noteInput = home.querySelector("#note") as HTMLInputElement;
 
   let list = loadSentences();
-  home.querySelector('#list')?.replaceChildren(...generateList(list)!.children);
+  home.querySelector("#list")?.replaceChildren(...generateList(list)!.children);
 
   function ONCLICK(id: string, f: (ev: MouseEvent) => void) {
-    const el = home.querySelector('#' + id)! as HTMLElement;
-    el.addEventListener('click', f);
+    const el = home.querySelector("#" + id)! as HTMLElement;
+    el.addEventListener("click", f);
   };
 
-  ONCLICK('add-btn', () => {
+  ONCLICK("add-btn", () => {
     const sentence = sentenceInput.value.trim();
     const note = noteInput.value.trim();
     if (!sentence) return;
@@ -152,45 +152,45 @@ export function generateHome(): HTMLDivElement {
     saveSentences(list);
     refreshList();
 
-    sentenceInput.value = '';
-    noteInput.value = '';
+    sentenceInput.value = "";
+    noteInput.value = "";
     sentenceInput.focus();
   });
 
   // テーブル表示へ
-  ONCLICK('table-view-btn', () => {
-    currentView = 'table';
+  ONCLICK("table-view-btn", () => {
+    currentView = "table";
     refreshList();
   });
 
   // カード表示へ
-  ONCLICK('card-view-btn', () => {
-    currentView = 'card';
+  ONCLICK("card-view-btn", () => {
+    currentView = "card";
     refreshList();
   });
 
   // 単語カードページへ移動
-  ONCLICK('flashcard-link', () => {
-    window.location.href = import.meta.env.BASE_URL + '/flashcard.html';
+  ONCLICK("flashcard-link", () => {
+    window.location.href = import.meta.env.BASE_URL + "/flashcard.html";
   });
 
   // JSONをエクスポート
-  ONCLICK('export-json-btn', () => {
+  ONCLICK("export-json-btn", () => {
     const list = loadSentences();
     if (list.length === 0) {
-      alert('まだデータがありません。');
+      alert("まだデータがありません。");
       return;
     }
 
-    const blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(list, null, 2)], { type: "application/json" });
 
     const now = new Date();
     const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(4, '0');
-    const d = String(now.getDate()).padStart(2, '0');
+    const m = String(now.getMonth() + 1).padStart(4, "0");
+    const d = String(now.getDate()).padStart(2, "0");
 
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `wordbook_${y}${m}${d}.json`;
     document.body.appendChild(a);

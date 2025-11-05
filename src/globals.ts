@@ -20,5 +20,5 @@ globalThis.greet = (name: string) => {
 
 globalThis.ONCLICK = (id: string, f: (ev: MouseEvent) => void) => {
   const el = document.getElementById(id);
-  el?.addEventListener('click', f);
+  el?.addEventListener("click", f);
 };
