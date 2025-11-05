@@ -51,7 +51,7 @@ function generateList(list: Sentence[]): HTMLDivElement | null {
         <td style="padding:6px;">${item.sentence}</td>
         <td style="padding:6px;color:#777;font-style:italic;">${item.note}</td>
         <td style="text-align:right;padding:6px;">
-          <button class="delete-btn" data-id="${item.id}">✕</button>
+          <button class="edit-btn" data-id="${item.id}">✕</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -72,18 +72,22 @@ function generateList(list: Sentence[]): HTMLDivElement | null {
       note.className = 'note';
       note.textContent = item.note;
 
-      const del = document.createElement('button');
-      del.className = 'delete-btn';
-      del.textContent = '✕';
-      del.addEventListener('click', () => {
-        const newList = list.filter((s) => s.id !== item.id);
-        saveSentences(newList);
-        refreshList();
+      // 編集ボタン
+      const edi = document.createElement('button');
+      edi.className = 'edit-btn';
+      edi.textContent = '🖊';
+      edi.addEventListener('click', () => {
+        const ppp = document.createElement('p');
+        ppp.textContent = '編集しました';
+        div.appendChild(ppp);
+        // const newList = list.filter((s) => s.id !== item.id);
+        // saveSentences(newList);
+        // refreshList();
       });
 
       div.appendChild(sentence);
       div.appendChild(note);
-      div.appendChild(del);
+      div.appendChild(edi);
       container.appendChild(div);
 
       // カードをクリックしたとき
