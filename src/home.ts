@@ -107,16 +107,11 @@ function refreshList() {
 // }
 
 // 編集カードを生成する
-function createEditCard(item: Sentence): HTMLDivElement {
-  const card = document.createElement("div");
-
-  // TODO: XSS対策！
-  card.innerHTML = `
-    <p><input value="${item.sentence}"></p>
-    <p><input value="${item.note}"></p>
+function createEditCard(item: Sentence): HTMLElement {
+  return html`
+    <p><input value=${item.sentence}></p>
+    <p><input value=${item.note}></p>
   `;
-
-  return card;
 }
 
 export function createHome(): HTMLDivElement {

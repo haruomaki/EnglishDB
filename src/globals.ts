@@ -12,6 +12,13 @@ declare global {
     * クリック時のイベントリスナーを設定するマクロ。
     */
   function ONCLICK(id: string, f: (ev: MouseEvent) => void): void;
+
+  /**
+   * DOMを作成するテンプレート。
+   * @param strings HTML文字列
+   * @param keys プレースホルダー
+   */
+  function html(strings: TemplateStringsArray, ...keys: unknown[]): HTMLElement;
 }
 
 globalThis.greet = (name: string) => {
@@ -22,3 +29,6 @@ globalThis.ONCLICK = (id: string, f: (ev: MouseEvent) => void) => {
   const el = document.getElementById(id);
   el?.addEventListener("click", f);
 };
+
+import html from "nanohtml";
+globalThis.html = html;
