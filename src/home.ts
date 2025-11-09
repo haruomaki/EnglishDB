@@ -61,32 +61,7 @@ function createList(list: Sentence[]): HTMLDivElement | null {
   } else {
     // これまでのカード表示
     list.forEach((item) => {
-      const div = document.createElement("div");
-      div.className = "card";
-
-      const sentence = document.createElement("div");
-      sentence.className = "sentence";
-      sentence.textContent = item.sentence;
-
-      const note = document.createElement("div");
-      note.className = "note";
-      note.textContent = item.note;
-
-      // 編集ボタン
-      const edi = document.createElement("button");
-      edi.className = "edit-btn";
-      edi.textContent = "🖊";
-      edi.addEventListener("click", () => {
-        div.replaceChildren(...createEditCard(item).children);
-        // const newList = list.filter((s) => s.id !== item.id);
-        // saveSentences(newList);
-        // refreshList();
-      });
-
-      div.appendChild(sentence);
-      div.appendChild(note);
-      div.appendChild(edi);
-      container.appendChild(div);
+      container.appendChild(createNormalCard(item));
     });
   }
 
@@ -106,11 +81,31 @@ function refreshList() {
 //   return input;
 // }
 
+// 通常カードを生成する
+function createNormalCard(item: Sentence): HTMLElement {
+  const card = html`
+    <div class="card">
+      <div class="sentence">${item.sentence}</div>
+      <div class="note">${item.note}</div>
+      <button class="edit-btn">🖊</button>
+    </div>
+  `;
+
+  // 編集ボタンクリック時
+  card.querySelector(".edit-btn")?.addEventListener("click", () => {
+    card.replaceWith(createEditCard(item));
+  });
+
+  return card;
+}
+
 // 編集カードを生成する
 function createEditCard(item: Sentence): HTMLElement {
   return html`
-    <p><input value=${item.sentence}></p>
-    <p><input value=${item.note}></p>
+    <div class="card">
+      <p><input value=${item.sentence}></p>
+      <p><input value=${item.note}></p>
+    </div>
   `;
 }
 
