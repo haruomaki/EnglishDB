@@ -85,13 +85,16 @@ function refreshList() {
 function createNormalCard(item: Sentence): HTMLElement {
   const card = html`
     <div class="card">
-      <div class="card-text">
-        <div class="sentence">${item.sentence}</div>
-        <div class="note">${item.note}</div>
+      <div class="card-top">
+        <div class="text-section">
+          <div class="sentence">${item.sentence}</div>
+          <div class="note">${item.note}</div>
+        </div>
+        <div class="ui-section">
+          <button class="edit-btn">🖊</button>
+        </div>
       </div>
-      <div class="card-ui">
-        <button class="edit-btn">🖊</button>
-        <br>
+      <div class="card-bottom">
         <button class="move-up">↑</button>
         <button class="move-down">↓</button>
       </div>
