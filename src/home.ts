@@ -95,8 +95,8 @@ function createNormalCard(item: Sentence): HTMLElement {
         </div>
       </div>
       <div class="card-bottom">
-        <button class="move-up">↑</button>
-        <button class="move-down">↓</button>
+        <button class="move-up"></button>
+        <button class="move-down"></button>
       </div>
     </div>
   `;
