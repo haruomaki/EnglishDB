@@ -1,0 +1,12 @@
+.card {
+    /* Flexboxモードに切替 */
+    display: flex;
+    /* アイテムを横に並べる（デフォルト） */
+    flex-direction: row;
+    /* 横方向の位置揃え: 左寄せ/中央/右寄せ */
+    justify-content: center;
+    /* 縦方向の位置揃え */
+    align-items: center;
+    /* アイテム間の隙間 */
+    gap: 10px;
+}

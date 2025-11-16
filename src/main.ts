@@ -2,6 +2,7 @@
 import "./globals";
 
 import "./style.css";
+import "./card.css";
 import { createHome } from "./home.ts";
 
 class App {
