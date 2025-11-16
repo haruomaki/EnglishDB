@@ -83,9 +83,9 @@ h1 {
 }
 
 .edit-btn {
-  position: absolute;
+  /* position: absolute;
   right: 10px;
-  top: 10px;
+  top: 10px; */
   background: transparent;
   border: none;
   color: #888;
