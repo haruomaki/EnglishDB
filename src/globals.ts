@@ -19,6 +19,12 @@ declare global {
    * @param keys プレースホルダー
    */
   function html(strings: TemplateStringsArray, ...keys: unknown[]): HTMLElement;
+
+  /**
+   * テンプレートにサニタイズした文字列を与えるのではなく、生のHTMLを渡したいときに使う関数。
+   * @param tag HTML文字列
+   */
+  function raw(tag: string): string | ChildNode[];
 }
 
 globalThis.greet = (name: string) => {
@@ -31,4 +37,6 @@ globalThis.ONCLICK = (id: string, f: (ev: MouseEvent) => void) => {
 };
 
 import html from "nanohtml";
+import raw from "nanohtml/raw";
 globalThis.html = html;
+globalThis.raw = raw;
