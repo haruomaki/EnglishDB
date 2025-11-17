@@ -61,11 +61,12 @@
     .card-bottom {
         text-align: right;
         padding: 0px 0px 0px 16px;
-        border-radius: 0px 0px 0px 12px;
+        border-radius: 0px 0px 12px 12px;
         background-image: linear-gradient(var(--card-bg), var(--card-grad));
 
         .move-up,
         .move-down {
+            color: #6b8081;
             border-width: 1px;
             border-color: #f1e5e5;
             padding: 4px;
@@ -73,31 +74,10 @@
             font-size: 14px;
             transition: all 0.2s ease;
             min-width: 52px;
-            height: 20px;
         }
 
-        /* 上矢印 */
-        .move-up::after {
-            content: '';
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-top: 2px solid #4b5563;
-            border-right: 2px solid #4b5563;
-            transform: rotate(-45deg);
-            /* 上向き */
-        }
-
-        /* 下矢印 */
-        .move-down::after {
-            content: '';
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-top: 2px solid #4b5563;
-            border-right: 2px solid #4b5563;
-            transform: rotate(135deg);
-            /* 下向き */
+        .move-down {
+            border-radius: 0px 0px 12px 0px;
         }
     }
 }

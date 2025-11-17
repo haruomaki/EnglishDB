@@ -1,3 +1,5 @@
+import arrow from "../images/arrow.svg?raw";
+
 interface Sentence {
   id: number;
   sentence: string;
@@ -95,8 +97,8 @@ function createNormalCard(item: Sentence): HTMLElement {
         </div>
       </div>
       <div class="card-bottom">
-        <button class="move-up"></button>
-        <button class="move-down"></button>
+        <button class="move-up"><span>${html([arrow])}</span></button>
+        <button class="move-down"><span>${html([arrow])}</span></button>
       </div>
     </div>
   `;
