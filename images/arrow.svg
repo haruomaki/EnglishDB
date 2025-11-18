@@ -2,5 +2,6 @@
      width="40" height="40" viewBox="0 0 40 40"
      fill="none" stroke="currentColor" stroke-width="4"
      stroke-linecap="round" stroke-linejoin="round">
-  <path d="M10 25 L20 15 L30 25" />
+  <path d="M2 27 L20 13 L38 27" />
+  <!-- <path d="M0 0 L0 40 L40 40 L40 0 L0 0" /> -->
 </svg>

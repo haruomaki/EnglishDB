@@ -3,6 +3,13 @@
     --card-grad: #e4e1ee;
 }
 
+/* SVG画像をフォントのように表示する */
+svg {
+    width: auto;
+    height: 1em;
+    vertical-align: -0.15em;
+}
+
 .card {
     background: var(--card-bg);
     border-radius: 12px;
@@ -71,13 +78,17 @@
             border-color: #f1e5e5;
             padding: 4px;
             background-color: transparent;
-            font-size: 14px;
+            font-size: 12px;
             transition: all 0.2s ease;
-            min-width: 52px;
+            min-width: 64px;
         }
 
         .move-down {
             border-radius: 0px 0px 12px 0px;
+
+            svg {
+                transform: rotate(180deg);
+            }
         }
     }
 }
