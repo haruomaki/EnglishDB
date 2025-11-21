@@ -14,6 +14,12 @@ declare global {
   function ONCLICK(id: string, f: (ev: MouseEvent) => void): void;
 
   /**
+   * WebアプリのルートDOMを取得する。
+   * @returns #appのDOM要素
+   */
+  function app(): HTMLElement;
+
+  /**
    * DOMを作成するテンプレート。
    * @param strings HTML文字列
    * @param keys プレースホルダー
@@ -34,6 +40,10 @@ globalThis.greet = (name: string) => {
 globalThis.ONCLICK = (id: string, f: (ev: MouseEvent) => void) => {
   const el = document.getElementById(id);
   el?.addEventListener("click", f);
+};
+
+globalThis.app = () => {
+  return document.querySelector("#app")!;
 };
 
 import html from "nanohtml";

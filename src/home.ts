@@ -75,12 +75,14 @@ function swapInPlace<T>(array: T[], i: number, j: number): boolean {
   return false;
 }
 
-function syncCard() {
-  const cards = document.querySelector("#list")!.children;
-
-  // console.log(cards.children);
-
+/**
+ * データベースの内容に合わせてカードの中身を更新する。
+ */
+function syncCard(container: HTMLElement = app()) {
+  const cards = container.querySelector("#list")!.children;
   const list = db.load();
+
+  if (cards.length !== list.length) throw "データベースと表示部の長さが合っていません";
 
   for (let i = 0; i < cards.length; i++) {
     const card = cards[i];
@@ -95,8 +97,8 @@ function createNormalCard(item: db.Sentence, index: number): HTMLElement {
     <div class="card">
       <div class="card-top">
         <div class="text-section">
-          <div class="sentence">${item.sentence}</div>
-          <div class="note">${item.note}</div>
+          <div class="sentence"></div>
+          <div class="note"></div>
         </div>
         <div class="ui-section">
           <button class="edit-btn">🖊</button>
@@ -164,6 +166,7 @@ export function createHome(): HTMLDivElement {
   let list = db.load();
   console.log(list);
   home.querySelector("#list")?.replaceChildren(...createList(list)!.children);
+  syncCard(home);
 
   function ONCLICK(id: string, f: (ev: MouseEvent) => void) {
     const el = home.querySelector("#" + id)! as HTMLElement;
