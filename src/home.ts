@@ -68,11 +68,25 @@ function refreshList() {
 // }
 
 function swapInPlace<T>(array: T[], i: number, j: number): boolean {
-  if (i !== j && 0 <= i || i < array.length && 0 <= j || j < array.length) {
+  if (i !== j && 0 <= i && i < array.length && 0 <= j && j < array.length) {
     [array[i], array[j]] = [array[j], array[i]];
     return true;
   }
   return false;
+}
+
+function syncCard() {
+  const cards = document.querySelector("#list")!.children;
+
+  // console.log(cards.children);
+
+  const list = db.load();
+
+  for (let i = 0; i < cards.length; i++) {
+    const card = cards[i];
+    card.querySelector(".sentence")!.textContent = list[i].sentence;
+    card.querySelector(".note")!.textContent = list[i].note;
+  }
 }
 
 // 通常カードを生成する
@@ -104,8 +118,10 @@ function createNormalCard(item: db.Sentence, index: number): HTMLElement {
   card.querySelector(".move-up")?.addEventListener("click", () => {
     console.log(index + "番目と" + (index - 1) + "番目を入れ替えます");
     const list = db.load();
-    swapInPlace(list, index, index - 1);
+    console.log(swapInPlace(list, index, index - 1));
     db.save(list);
+
+    syncCard();
   });
 
   return card;
