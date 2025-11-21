@@ -1,25 +1,9 @@
 import arrow from "../images/arrow.svg?raw";
+import * as db from "./database";
 
-interface Sentence {
-  id: number;
-  sentence: string;
-  note: string;
-  createdAt: string;
-}
-
-const STORAGE_KEY = "wordbook";
-
-function loadSentences(): Sentence[] {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : [];
-}
-
-function saveSentences(list: Sentence[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-}
 let currentView: "card" | "table" = "card";
 
-function createList(list: Sentence[]): HTMLDivElement | null {
+function createList(list: db.Sentence[]): HTMLDivElement | null {
   const container = document.createElement("div");
   container.innerHTML = "";
 
@@ -71,7 +55,7 @@ function createList(list: Sentence[]): HTMLDivElement | null {
 }
 
 function refreshList() {
-  document.querySelector("#list")?.replaceChildren(...createList(loadSentences())!.children);
+  document.querySelector("#list")?.replaceChildren(...createList(db.load())!.children);
 }
 
 // // 入力フィールドを作成
@@ -92,7 +76,7 @@ function swapInPlace<T>(array: T[], i: number, j: number): boolean {
 }
 
 // 通常カードを生成する
-function createNormalCard(item: Sentence, index: number): HTMLElement {
+function createNormalCard(item: db.Sentence, index: number): HTMLElement {
   const card = html`
     <div class="card">
       <div class="card-top">
@@ -119,16 +103,16 @@ function createNormalCard(item: Sentence, index: number): HTMLElement {
   // 上下ボタンクリック時
   card.querySelector(".move-up")?.addEventListener("click", () => {
     console.log(index + "番目と" + (index - 1) + "番目を入れ替えます");
-    const list = loadSentences();
+    const list = db.load();
     swapInPlace(list, index, index - 1);
-    saveSentences(list);
+    db.save(list);
   });
 
   return card;
 }
 
 // 編集カードを生成する
-function createEditCard(item: Sentence): HTMLElement {
+function createEditCard(item: db.Sentence): HTMLElement {
   return html`
     <div class="card">
       <p><input value=${item.sentence}></p>
@@ -161,7 +145,7 @@ export function createHome(): HTMLDivElement {
   const sentenceInput = home.querySelector("#sentence") as HTMLInputElement;
   const noteInput = home.querySelector("#note") as HTMLInputElement;
 
-  let list = loadSentences();
+  let list = db.load();
   console.log(list);
   home.querySelector("#list")?.replaceChildren(...createList(list)!.children);
 
@@ -175,7 +159,7 @@ export function createHome(): HTMLDivElement {
     const note = noteInput.value.trim();
     if (!sentence) return;
 
-    const newItem: Sentence = {
+    const newItem: db.Sentence = {
       id: Date.now(),
       sentence,
       note,
@@ -183,7 +167,7 @@ export function createHome(): HTMLDivElement {
     };
 
     list = [newItem, ...list];
-    saveSentences(list);
+    db.save(list);
     refreshList();
 
     sentenceInput.value = "";
@@ -210,7 +194,7 @@ export function createHome(): HTMLDivElement {
 
   // JSONをエクスポート
   ONCLICK("export-json-btn", () => {
-    const list = loadSentences();
+    const list = db.load();
     if (list.length === 0) {
       alert("まだデータがありません。");
       return;
