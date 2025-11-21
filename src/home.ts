@@ -62,8 +62,8 @@ function createList(list: Sentence[]): HTMLDivElement | null {
     container.appendChild(table);
   } else {
     // これまでのカード表示
-    list.forEach((item) => {
-      container.appendChild(createNormalCard(item));
+    list.forEach((item, index) => {
+      container.appendChild(createNormalCard(item, index));
     });
   }
 
@@ -83,8 +83,16 @@ function refreshList() {
 //   return input;
 // }
 
+function swapInPlace<T>(array: T[], i: number, j: number): boolean {
+  if (i !== j && 0 <= i || i < array.length && 0 <= j || j < array.length) {
+    [array[i], array[j]] = [array[j], array[i]];
+    return true;
+  }
+  return false;
+}
+
 // 通常カードを生成する
-function createNormalCard(item: Sentence): HTMLElement {
+function createNormalCard(item: Sentence, index: number): HTMLElement {
   const card = html`
     <div class="card">
       <div class="card-top">
@@ -106,6 +114,14 @@ function createNormalCard(item: Sentence): HTMLElement {
   // 編集ボタンクリック時
   card.querySelector(".edit-btn")?.addEventListener("click", () => {
     card.replaceWith(createEditCard(item));
+  });
+
+  // 上下ボタンクリック時
+  card.querySelector(".move-up")?.addEventListener("click", () => {
+    console.log(index + "番目と" + (index - 1) + "番目を入れ替えます");
+    const list = loadSentences();
+    swapInPlace(list, index, index - 1);
+    saveSentences(list);
   });
 
   return card;
@@ -146,6 +162,7 @@ export function createHome(): HTMLDivElement {
   const noteInput = home.querySelector("#note") as HTMLInputElement;
 
   let list = loadSentences();
+  console.log(list);
   home.querySelector("#list")?.replaceChildren(...createList(list)!.children);
 
   function ONCLICK(id: string, f: (ev: MouseEvent) => void) {
