@@ -48,7 +48,8 @@ svg {
         .ui-section {
             width: 5%;
 
-            .edit-btn {
+            .edit-btn,
+            .save-btn {
                 position: absolute;
                 right: 10px;
                 top: 10px;
@@ -60,7 +61,8 @@ svg {
             }
         }
 
-        .edit-btn:hover {
+        .edit-btn:hover,
+        .save-btn:hover {
             color: darkgreen;
         }
     }

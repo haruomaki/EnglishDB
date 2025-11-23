@@ -65,6 +65,7 @@ function swapInPlace<T>(array: T[], i: number, j: number): boolean {
   return false;
 }
 
+// TODO: 廃止
 /**
  * データベースの内容に合わせてカードの中身を更新する。
  */
@@ -122,13 +123,14 @@ function createCards(list: db.Sentence[]) {
 function createCardTop(index: number, mode: "normal" | "edit") {
   const cards = document.querySelector("#list")!.children;
   const cardTop = cards[index].querySelector(".card-top")!;
+  const record = db.load()[index];
 
   if (mode === "normal") {
     const newCardTop = html`
       <div class="card-top">
         <div class="text-section">
-          <div class="sentence"></div>
-          <div class="note"></div>
+          <div class="sentence">${record.sentence}</div>
+          <div class="note">${record.note}</div>
         </div>
         <div class="ui-section">
           <button class="edit-btn">🖊</button>
@@ -146,15 +148,31 @@ function createCardTop(index: number, mode: "normal" | "edit") {
     const newCardTop = html`
     <div class="card-top">
       <div class="text-section">
-        <input class="sentence">
+        <input type="text" name="sentence" value=${record.sentence}>
         <br>
-        <input class="note">
+        <input type="text" name="note" value=${record.note}>
       </div>
       <div class="ui-section">
-        <button class="edit-btn">💾</button>
+        <button class="save-btn">💾</button>
       </div>
     </div>
   `;
+
+    // 保存ボタンクリック時
+    newCardTop.querySelector(".save-btn")?.addEventListener("click", () => {
+      const new_sentence = newCardTop.querySelector<HTMLInputElement>('input[name="sentence"]')!.value;
+      const new_note = newCardTop.querySelector<HTMLInputElement>('input[name="note"]')!.value;
+
+      console.log(new_sentence, new_note);
+
+      // データベースを更新。
+      const list = db.load();
+      list[index] = { ...list[index], sentence: new_sentence, note: new_note };
+      db.save(list);
+
+      createCardTop(index, "normal");
+    });
+
     cardTop.replaceWith(newCardTop);
   } else {
     throw Error("modeが不正な値です。");
