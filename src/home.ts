@@ -85,7 +85,7 @@ function syncCard() {
 // カードを生成する
 function createCards(list: db.Sentence[]) {
   // カードの外殻を個数分作成。
-  list.forEach((_, index) => {
+  list.forEach(() => {
     const card = html`
       <div class="card">
         <div class="card-top"></div>
@@ -98,6 +98,7 @@ function createCards(list: db.Sentence[]) {
 
     // 上下ボタンクリック時
     card.querySelector(".move-up")?.addEventListener("click", () => {
+      const index = [...card.parentElement!.children].indexOf(card);
       const list = db.load();
       swapInPlace(list, index, index - 1);
       db.save(list);
@@ -105,6 +106,7 @@ function createCards(list: db.Sentence[]) {
     });
 
     card.querySelector(".move-down")?.addEventListener("click", () => {
+      const index = [...card.parentElement!.children].indexOf(card);
       const list = db.load();
       swapInPlace(list, index, index + 1);
       db.save(list);
