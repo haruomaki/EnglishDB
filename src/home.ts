@@ -78,8 +78,8 @@ function swapInPlace<T>(array: T[], i: number, j: number): boolean {
 /**
  * データベースの内容に合わせてカードの中身を更新する。
  */
-function syncCard(container: HTMLElement = app()) {
-  const cards = container.querySelector("#list")!.children;
+function syncCard() {
+  const cards = document.querySelector("#list")!.children;
   const list = db.load();
 
   if (cards.length !== list.length) throw "データベースと表示部の長さが合っていません";
@@ -144,7 +144,7 @@ function createEditCard(item: db.Sentence): HTMLElement {
   `;
 }
 
-export function createHome(): HTMLDivElement {
+export function createHome() {
   const home = document.createElement("div");
   home.innerHTML = `
     <h1>英語短文ノート</h1>
@@ -171,10 +171,11 @@ export function createHome(): HTMLDivElement {
   let list = db.load();
   console.log(list);
   home.querySelector("#list")?.replaceChildren(...createList(list)!.children);
-  syncCard(home);
+  document.getElementById("app")?.replaceChildren(...home.children);
+  syncCard();
 
   function ONCLICK(id: string, f: (ev: MouseEvent) => void) {
-    const el = home.querySelector("#" + id)! as HTMLElement;
+    const el = document.querySelector("#" + id)! as HTMLElement;
     el.addEventListener("click", f);
   };
 
@@ -240,6 +241,4 @@ export function createHome(): HTMLDivElement {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
-
-  return home;
 }

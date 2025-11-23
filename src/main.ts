@@ -14,7 +14,7 @@ class App {
 
   showHome() {
     this.currentState = "home";
-    document.getElementById("app")?.replaceChildren(...createHome().children);
+    createHome();
   }
 }
 
