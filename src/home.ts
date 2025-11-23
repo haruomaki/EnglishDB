@@ -118,11 +118,16 @@ function createNormalCard(item: db.Sentence, index: number): HTMLElement {
 
   // 上下ボタンクリック時
   card.querySelector(".move-up")?.addEventListener("click", () => {
-    console.log(index + "番目と" + (index - 1) + "番目を入れ替えます");
     const list = db.load();
-    console.log(swapInPlace(list, index, index - 1));
+    swapInPlace(list, index, index - 1);
     db.save(list);
+    syncCard();
+  });
 
+  card.querySelector(".move-down")?.addEventListener("click", () => {
+    const list = db.load();
+    swapInPlace(list, index, index + 1);
+    db.save(list);
     syncCard();
   });
 
