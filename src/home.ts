@@ -3,13 +3,17 @@ import * as db from "./database";
 
 let currentView: "card" | "table" = "card";
 
-function createList(list: db.Sentence[]): HTMLDivElement | null {
+/**
+ * 単語一覧を作成（or更新）する。
+ */
+function createList() {
+  const list = db.load();
   const container = document.createElement("div");
   container.innerHTML = "";
 
   if (list.length === 0) {
     container.innerHTML = "<p style='text-align:center;color:#999;'>まだ何も追加されていません</p>";
-    return null;
+    return;
   }
 
   if (currentView === "table") {
@@ -51,21 +55,8 @@ function createList(list: db.Sentence[]): HTMLDivElement | null {
     });
   }
 
-  return container;
+  document.querySelector("#list")!.replaceChildren(...container.children);
 }
-
-function refreshList() {
-  document.querySelector("#list")?.replaceChildren(...createList(db.load())!.children);
-}
-
-// // 入力フィールドを作成
-// function createInput(value: string): HTMLInputElement {
-//   const input = document.createElement("input");
-//   input.type = "text";
-//   input.value = value;
-//   input.className = "edit-input";
-//   return input;
-// }
 
 function swapInPlace<T>(array: T[], i: number, j: number): boolean {
   if (i !== j && 0 <= i && i < array.length && 0 <= j && j < array.length) {
@@ -82,7 +73,7 @@ function syncCard() {
   const cards = document.querySelector("#list")!.children;
   const list = db.load();
 
-  if (cards.length !== list.length) throw "データベースと表示部の長さが合っていません";
+  if (cards.length !== list.length) throw Error("データベースと表示部の長さが合っていません");
 
   for (let i = 0; i < cards.length; i++) {
     const card = cards[i];
@@ -165,13 +156,16 @@ export function createHome() {
     <section id="list" class="list-section"></section>
   `;
 
+  // 雛形をdocumentに反映させたあと、それを編集する形で画面を構築していく。
+  document.getElementById("app")?.replaceChildren(...home.children);
+
   const sentenceInput = home.querySelector("#sentence") as HTMLInputElement;
   const noteInput = home.querySelector("#note") as HTMLInputElement;
 
+  // TODO: listの読み込み位置はここでなくてよい
   let list = db.load();
   console.log(list);
-  home.querySelector("#list")?.replaceChildren(...createList(list)!.children);
-  document.getElementById("app")?.replaceChildren(...home.children);
+  createList();
   syncCard();
 
   function ONCLICK(id: string, f: (ev: MouseEvent) => void) {
@@ -193,7 +187,7 @@ export function createHome() {
 
     list = [newItem, ...list];
     db.save(list);
-    refreshList();
+    createList();
 
     sentenceInput.value = "";
     noteInput.value = "";
@@ -203,13 +197,13 @@ export function createHome() {
   // テーブル表示へ
   ONCLICK("table-view-btn", () => {
     currentView = "table";
-    refreshList();
+    createList();
   });
 
   // カード表示へ
   ONCLICK("card-view-btn", () => {
     currentView = "card";
-    refreshList();
+    createList();
   });
 
   // 単語カードページへ移動
