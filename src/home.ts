@@ -65,6 +65,36 @@ function swapInPlace<T>(array: T[], i: number, j: number): boolean {
   return false;
 }
 
+/**
+ * 指定した親要素の子ノード同士を入れ替えます。
+ * i, j には 0 以上 parentElement.children.length 未満の整数を指定してください。
+ *
+ * @param parentElement 子要素を入れ替える対象となる親要素
+ * @param i 入れ替えたい最初の子要素のインデックス
+ * @param j 入れ替えたいもう一方の子要素のインデックス
+ * @returns 成功時は true、インデックスが不正な場合は false
+ */
+function swapChildElements(
+  parentElement: HTMLElement,
+  i: number,
+  j: number
+): boolean {
+  const children = parentElement.children;
+  const child1 = children.item(i);
+  const child2 = children.item(j);
+  if (!child1 || !child2) {
+    console.error("指定されたインデックスの子要素が存在しません。");
+    return false;
+  }
+
+  const placeholder = document.createElement("div");
+  child1.replaceWith(placeholder);
+  child2.replaceWith(child1);
+  placeholder.replaceWith(child2);
+
+  return true;
+}
+
 // TODO: 廃止
 /**
  * データベースの内容に合わせてカードの中身を更新する。
@@ -102,7 +132,7 @@ function createCards(list: db.Sentence[]) {
       const list = db.load();
       swapInPlace(list, index, index - 1);
       db.save(list);
-      syncCard();
+      swapChildElements(card.parentElement!, index, index - 1);
     });
 
     card.querySelector(".move-down")?.addEventListener("click", () => {
@@ -110,7 +140,7 @@ function createCards(list: db.Sentence[]) {
       const list = db.load();
       swapInPlace(list, index, index + 1);
       db.save(list);
-      syncCard();
+      swapChildElements(card.parentElement!, index, index + 1);
     });
 
     document.querySelector("#list")!.appendChild(card);
