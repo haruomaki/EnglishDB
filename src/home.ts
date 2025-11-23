@@ -163,8 +163,6 @@ function createCardTop(index: number, mode: "normal" | "edit") {
       const new_sentence = newCardTop.querySelector<HTMLInputElement>('input[name="sentence"]')!.value;
       const new_note = newCardTop.querySelector<HTMLInputElement>('input[name="note"]')!.value;
 
-      console.log(new_sentence, new_note);
-
       // データベースを更新。
       const list = db.load();
       list[index] = { ...list[index], sentence: new_sentence, note: new_note };
@@ -180,8 +178,7 @@ function createCardTop(index: number, mode: "normal" | "edit") {
 }
 
 export function createHome() {
-  const home = document.createElement("div");
-  home.innerHTML = `
+  const home = html`
     <h1>英語短文ノート</h1>
 
     <section class="form-section">
@@ -203,14 +200,11 @@ export function createHome() {
   // 雛形をdocumentに反映させたあと、それを編集する形で画面を構築していく。
   document.getElementById("app")?.replaceChildren(...home.children);
 
+  // カード一覧生成
+  createList();
+
   const sentenceInput = home.querySelector("#sentence") as HTMLInputElement;
   const noteInput = home.querySelector("#note") as HTMLInputElement;
-
-  // TODO: listの読み込み位置はここでなくてよい
-  let list = db.load();
-  console.log(list);
-  createList();
-  syncCard();
 
   function ONCLICK(id: string, f: (ev: MouseEvent) => void) {
     const el = document.querySelector("#" + id)! as HTMLElement;
@@ -229,7 +223,8 @@ export function createHome() {
       createdAt: new Date().toISOString(),
     };
 
-    list = [newItem, ...list];
+    // TODO: データベース操作関数（addとか）に置き換え
+    const list = [newItem, ...db.load()];
     db.save(list);
     createList();
 
