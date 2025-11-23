@@ -35,13 +35,13 @@ function createList() {
 
     const tbody = table.querySelector("tbody")!;
 
-    list.forEach((item) => {
+    list.forEach((sentence) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td style="padding:6px;">${item.sentence}</td>
-        <td style="padding:6px;color:#777;font-style:italic;">${item.note}</td>
+        <td style="padding:6px;">${sentence.sentence}</td>
+        <td style="padding:6px;color:#777;font-style:italic;">${sentence.note}</td>
         <td style="text-align:right;padding:6px;">
-          <button class="edit-btn" data-id="${item.id}">✕</button>
+          <button class="edit-btn" data-id="${sentence.id}">✕</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -50,9 +50,8 @@ function createList() {
     container.appendChild(table);
   } else {
     // これまでのカード表示
-    list.forEach((item, index) => {
-      container.appendChild(createNormalCard(item, index));
-    });
+    createCards(list);
+    return;
   }
 
   document.querySelector("#list")!.replaceChildren(...container.children);
@@ -82,10 +81,50 @@ function syncCard() {
   }
 }
 
-// 通常カードを生成する
-function createNormalCard(item: db.Sentence, index: number): HTMLElement {
-  const card = html`
-    <div class="card">
+// カードを生成する
+function createCards(list: db.Sentence[]) {
+  // カードの外殻を個数分作成。
+  list.forEach((_, index) => {
+    const card = html`
+      <div class="card">
+        <div class="card-top"></div>
+        <div class="card-bottom">
+          <button class="move-up"><span>${raw(arrow)}</span></button>
+          <button class="move-down"><span>${raw(arrow)}</span></button>
+        </div>
+      </div>
+    `;
+
+    // 上下ボタンクリック時
+    card.querySelector(".move-up")?.addEventListener("click", () => {
+      const list = db.load();
+      swapInPlace(list, index, index - 1);
+      db.save(list);
+      syncCard();
+    });
+
+    card.querySelector(".move-down")?.addEventListener("click", () => {
+      const list = db.load();
+      swapInPlace(list, index, index + 1);
+      db.save(list);
+      syncCard();
+    });
+
+    document.querySelector("#list")!.appendChild(card);
+  });
+
+  // 各カードのcard-top部を生成。
+  list.forEach((_, index) => {
+    createCardTop(index, "normal");
+  });
+}
+
+function createCardTop(index: number, mode: "normal" | "edit") {
+  const cards = document.querySelector("#list")!.children;
+  const cardTop = cards[index].querySelector(".card-top")!;
+
+  if (mode === "normal") {
+    const newCardTop = html`
       <div class="card-top">
         <div class="text-section">
           <div class="sentence"></div>
@@ -95,44 +134,31 @@ function createNormalCard(item: db.Sentence, index: number): HTMLElement {
           <button class="edit-btn">🖊</button>
         </div>
       </div>
-      <div class="card-bottom">
-        <button class="move-up"><span>${raw(arrow)}</span></button>
-        <button class="move-down"><span>${raw(arrow)}</span></button>
+    `;
+
+    // 編集ボタンクリック時
+    newCardTop.querySelector(".edit-btn")?.addEventListener("click", () => {
+      createCardTop(index, "edit");
+    });
+
+    cardTop.replaceWith(newCardTop);
+  } else if (mode === "edit") {
+    const newCardTop = html`
+    <div class="card-top">
+      <div class="text-section">
+        <input class="sentence">
+        <br>
+        <input class="note">
+      </div>
+      <div class="ui-section">
+        <button class="edit-btn">💾</button>
       </div>
     </div>
   `;
-
-  // 編集ボタンクリック時
-  card.querySelector(".edit-btn")?.addEventListener("click", () => {
-    card.replaceWith(createEditCard(item));
-  });
-
-  // 上下ボタンクリック時
-  card.querySelector(".move-up")?.addEventListener("click", () => {
-    const list = db.load();
-    swapInPlace(list, index, index - 1);
-    db.save(list);
-    syncCard();
-  });
-
-  card.querySelector(".move-down")?.addEventListener("click", () => {
-    const list = db.load();
-    swapInPlace(list, index, index + 1);
-    db.save(list);
-    syncCard();
-  });
-
-  return card;
-}
-
-// 編集カードを生成する
-function createEditCard(item: db.Sentence): HTMLElement {
-  return html`
-    <div class="card">
-      <p><input value=${item.sentence}></p>
-      <p><input value=${item.note}></p>
-    </div>
-  `;
+    cardTop.replaceWith(newCardTop);
+  } else {
+    throw Error("modeが不正な値です。");
+  }
 }
 
 export function createHome() {
