@@ -57,14 +57,6 @@ function createList() {
   document.querySelector("#list")!.replaceChildren(...container.children);
 }
 
-function swapInPlace<T>(array: T[], i: number, j: number): boolean {
-  if (i !== j && 0 <= i && i < array.length && 0 <= j && j < array.length) {
-    [array[i], array[j]] = [array[j], array[i]];
-    return true;
-  }
-  return false;
-}
-
 /**
  * 指定した親要素の子ノード同士を入れ替えます。
  * i, j には 0 以上 parentElement.children.length 未満の整数を指定してください。
@@ -95,23 +87,6 @@ function swapChildElements(
   return true;
 }
 
-// TODO: 廃止
-/**
- * データベースの内容に合わせてカードの中身を更新する。
- */
-function syncCard() {
-  const cards = document.querySelector("#list")!.children;
-  const list = db.load();
-
-  if (cards.length !== list.length) throw Error("データベースと表示部の長さが合っていません");
-
-  for (let i = 0; i < cards.length; i++) {
-    const card = cards[i];
-    card.querySelector(".sentence")!.textContent = list[i].sentence;
-    card.querySelector(".note")!.textContent = list[i].note;
-  }
-}
-
 // カードを生成する
 function createCards(list: db.Sentence[]) {
   // カードの外殻を個数分作成。
@@ -129,17 +104,13 @@ function createCards(list: db.Sentence[]) {
     // 上下ボタンクリック時
     card.querySelector(".move-up")?.addEventListener("click", () => {
       const index = [...card.parentElement!.children].indexOf(card);
-      const list = db.load();
-      swapInPlace(list, index, index - 1);
-      db.save(list);
+      db.swap(index, index - 1);
       swapChildElements(card.parentElement!, index, index - 1);
     });
 
     card.querySelector(".move-down")?.addEventListener("click", () => {
       const index = [...card.parentElement!.children].indexOf(card);
-      const list = db.load();
-      swapInPlace(list, index, index + 1);
-      db.save(list);
+      db.swap(index, index + 1);
       swapChildElements(card.parentElement!, index, index + 1);
     });
 
