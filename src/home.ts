@@ -127,8 +127,8 @@ function createCards(list: db.Sentence[]) {
 }
 
 function createCardTop(index: number, mode: "normal" | "edit") {
-  const cards = document.querySelector("#list")!.children;
-  const cardTop = cards[index].querySelector(".card-top")!;
+  const card = document.querySelector("#list")!.children[index];
+  const cardTop = card.querySelector(".card-top")!;
   const record = db.load()[index];
 
   if (mode === "normal") {
@@ -146,6 +146,7 @@ function createCardTop(index: number, mode: "normal" | "edit") {
 
     // 編集ボタンクリック時
     newCardTop.querySelector(".edit-btn")?.addEventListener("click", () => {
+      const index = [...card.parentElement!.children].indexOf(card);
       createCardTop(index, "edit");
     });
 
@@ -168,6 +169,7 @@ function createCardTop(index: number, mode: "normal" | "edit") {
     newCardTop.querySelector(".save-btn")?.addEventListener("click", () => {
       const new_sentence = newCardTop.querySelector<HTMLInputElement>('input[name="sentence"]')!.value;
       const new_note = newCardTop.querySelector<HTMLInputElement>('input[name="note"]')!.value;
+      const index = [...card.parentElement!.children].indexOf(card);
 
       // データベースを更新。
       db.modify(index, new_sentence, new_note);
