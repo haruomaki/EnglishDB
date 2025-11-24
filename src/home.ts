@@ -1,5 +1,6 @@
 import arrow from "../images/arrow.svg?raw";
 import * as db from "./database";
+import autoAnimate from "@formkit/auto-animate";
 
 let currentView: "card" | "table" = "card";
 
@@ -75,7 +76,7 @@ function swapChildElements(
   const child1 = children.item(i);
   const child2 = children.item(j);
   if (!child1 || !child2) {
-    console.error("指定されたインデックスの子要素が存在しません。");
+    console.info("指定されたインデックスの子要素が存在しません。");
     return false;
   }
 
@@ -90,7 +91,9 @@ function swapChildElements(
 // カードを生成する
 function createCards(list: db.Sentence[]) {
   // 一旦全ての子要素を削除。
-  document.querySelector("#list")!.innerHTML = "";
+  const cardContainer = document.querySelector("#list")! as HTMLElement;
+  cardContainer.innerHTML = "";
+  autoAnimate(cardContainer);
 
   // カードの外殻を個数分作成。
   list.forEach(() => {
@@ -117,7 +120,7 @@ function createCards(list: db.Sentence[]) {
       swapChildElements(card.parentElement!, index, index + 1);
     });
 
-    document.querySelector("#list")!.appendChild(card);
+    cardContainer.appendChild(card);
   });
 
   // 各カードのcard-top部を生成。
@@ -185,7 +188,10 @@ function createCardTop(index: number, mode: "normal" | "edit") {
 
 export function createHome() {
   const home = html`
-    <h1>英語短文ノート</h1>
+    <div class="title-with-badge">
+      <h1>英語短文ノート</h1>
+      <a href="https://github.com/haruomaki/EnglishDB" target="_blank"><img alt="GitHubリポジトリへ移動" src="https://img.shields.io/badge/GitHub-green?logo=github"></a>
+    </div>
 
     <section class="form-section">
       <input id="sentence" type="text" placeholder="英語文を入力" />
