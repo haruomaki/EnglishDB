@@ -167,9 +167,7 @@ function createCardTop(index: number, mode: "normal" | "edit") {
       const new_note = newCardTop.querySelector<HTMLInputElement>('input[name="note"]')!.value;
 
       // データベースを更新。
-      const list = db.load();
-      list[index] = { ...list[index], sentence: new_sentence, note: new_note };
-      db.save(list);
+      db.modify(index, new_sentence, new_note);
 
       createCardTop(index, "normal");
     });

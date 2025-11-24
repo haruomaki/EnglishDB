@@ -40,11 +40,51 @@ export function swap(i: number, j: number) {
   save(list);
 }
 
+/**
+ * データベースにレコードを挿入する。
+ * @param index 挿入したいインデックス
+ * @param sentence 英単語
+ * @param note 訳
+ */
+export function insert(index: number, sentence: string, note: string) {
+  const list = load();
+  const record: Sentence = { id: Date.now(), sentence, note, createdAt: new Date().toISOString() };
+  list.splice(index, 0, record);
+  save(list);
+}
+
+/**
+ * データベースからレコードを削除する。
+ * @param index 削除したいインデックス
+ */
+export function erase(index: number) {
+  const list = load();
+  list.splice(index, 1);
+  save(list);
+}
+
+/**
+ * データベースの1つのレコードを更新する。
+ * @param index レコードのインデックス
+ * @param sentence 英単語
+ * @param note 訳
+ */
+export function modify(index: number, sentence: string, note: string) {
+  const list = load();
+  const record: Sentence = { id: Date.now(), sentence, note, createdAt: new Date().toISOString() };
+  list.splice(index, 1);
+  list.splice(index, 0, record);
+  save(list);
+}
+
 // デバッグ用
 interface DB {
   load: typeof load;
   save: typeof save;
   swap: typeof swap;
+  insert: typeof insert;
+  erase: typeof erase;
+  modify: typeof modify;
   reset: () => void;
   dump: () => void;
   patch: (f: (arr: Sentence[]) => Sentence[]) => void;
@@ -61,6 +101,9 @@ if (import.meta.env.DEV) {
     load,
     save,
     swap,
+    insert,
+    erase,
+    modify,
     reset() {
       localStorage.removeItem(STORAGE_KEY);
     },
