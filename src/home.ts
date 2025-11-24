@@ -89,6 +89,9 @@ function swapChildElements(
 
 // カードを生成する
 function createCards(list: db.Sentence[]) {
+  // 一旦全ての子要素を削除。
+  document.querySelector("#list")!.innerHTML = "";
+
   // カードの外殻を個数分作成。
   list.forEach(() => {
     const card = html`
@@ -204,8 +207,8 @@ export function createHome() {
   // カード一覧生成
   createList();
 
-  const sentenceInput = home.querySelector("#sentence") as HTMLInputElement;
-  const noteInput = home.querySelector("#note") as HTMLInputElement;
+  const sentenceInput = document.querySelector("#sentence") as HTMLInputElement;
+  const noteInput = document.querySelector("#note") as HTMLInputElement;
 
   function ONCLICK(id: string, f: (ev: MouseEvent) => void) {
     const el = document.querySelector("#" + id)! as HTMLElement;
@@ -217,16 +220,9 @@ export function createHome() {
     const note = noteInput.value.trim();
     if (!sentence) return;
 
-    const newItem: db.Sentence = {
-      id: Date.now(),
-      sentence,
-      note,
-      createdAt: new Date().toISOString(),
-    };
-
-    // TODO: データベース操作関数（addとか）に置き換え
-    const list = [newItem, ...db.load()];
-    db.save(list);
+    // データベースに単語を追加。
+    db.insert(0, sentence, note);
+    // TODO: createListではなくカードを一枚だけ追加する関数を導入したい
     createList();
 
     sentenceInput.value = "";

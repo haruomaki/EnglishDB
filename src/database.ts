@@ -72,8 +72,7 @@ export function erase(index: number) {
 export function modify(index: number, sentence: string, note: string) {
   const list = load();
   const record: Sentence = { id: Date.now(), sentence, note, createdAt: new Date().toISOString() };
-  list.splice(index, 1);
-  list.splice(index, 0, record);
+  list.splice(index, 1, record);
   save(list);
 }
 
