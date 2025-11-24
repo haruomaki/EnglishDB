@@ -188,7 +188,10 @@ function createCardTop(index: number, mode: "normal" | "edit") {
 
 export function createHome() {
   const home = html`
-    <h1>英語短文ノート</h1>
+    <div class="title-with-badge">
+      <h1>英語短文ノート</h1>
+      <a href="https://github.com/haruomaki/EnglishDB" target="_blank"><img alt="GitHubリポジトリへ移動" src="https://img.shields.io/badge/GitHub-green?logo=github"></a>
+    </div>
 
     <section class="form-section">
       <input id="sentence" type="text" placeholder="英語文を入力" />

@@ -15,9 +15,15 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
+.title-with-badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6em;
+
+  img {
+    vertical-align: middle;
+  }
 }
 
 .form-section {
